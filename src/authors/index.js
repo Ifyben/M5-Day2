@@ -65,7 +65,7 @@ router.post("/", async (req, res, next) => {
         fileAsJSONArray.push(author);
         fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
         res.send(author)
-        
+
     }   catch (error) {
         res.send(500).send({ message: error.message})
     }
@@ -74,6 +74,24 @@ router.post("/", async (req, res, next) => {
 // delete author
 router.delete("/:id", async (req, res, next) => {
     try {
+
+        const fileAsBuffer = fs.readFileSync(authorsFilePath);
+        const fileAsString = fileAsBuffer.toString();
+        let fileAsJSONArray = JSON.parse(fileAsString);
+        const author = fileAsJSONArray.find(
+            (author) => author.id === req.params.id
+            );
+            if(!author) {
+              res
+                .status(404)
+                .send({ message: `Author with ${req.params.id} is not found!`});
+            }
+            fileAsJSONArray = fileAsJSONArray.filter(
+                (author) => author.id !== req.params.id
+            );
+            fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+            res.status(204).send();
+
     } catch (error) {
       res.send(500).send({ message: error.message})
     }
@@ -82,6 +100,30 @@ router.delete("/:id", async (req, res, next) => {
 // update author
 router.put("/:id", async (req, res, next) => {
     try {
+        
+        const fileAsBuffer = fs.readFileSync(authorsFilePath);
+        const fileAsString = fileAsBuffer.toString();
+        let fileAsJSONArray = JSON.parse(fileAsString);
+        const authorIndex = fileAsJSONArray.findIndex(
+            (author) => author.id === req.params.id
+            );
+            if(!authorIndex == -1) {
+              res
+                .status(404)
+                .send({ message: `Author with ${req.params.id} is not found!`});
+            }
+            const previousAuthorData = fileAsJSONArray[authorIndex];
+            const changedAuthor = {
+                ...previousAuthorData,
+                ...req.body,
+                updatedAt: new Date(),
+                id: req.params.id,
+            };
+            fileAsJSONArray[authorIndex] = changedAuthor;
+
+            fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+            res.send(changedAuthor);
+
     } catch (error) {
       res.send(500).send({ message: error.message})
     }
