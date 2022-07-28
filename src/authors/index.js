@@ -1,5 +1,6 @@
 import express from "express"
 import fs from "fs"
+import uniqid from "uniqid"
 import path,{dirname} from "path";
 import { fileURLToPath } from "url"
 
@@ -31,8 +32,25 @@ router.get("/:id", async (req, res, next) => {
 // create author
 router.post("/", async (req, res, next) => {
     try {
-    } catch (error) {
-      res.send(500).send({ message: error.message})
+        const { name, surname, email, dateOfBirth } = req.body;
+        const author = {
+            id: uniqid(),
+            name,
+            surname,
+            email,
+            dateOfBirth,
+            avatar: `https://ui-avatar.com/api/?name=${name}+${surname}`,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+        const fileAsBuffer = fs.readFileSync(authorsFilePath);
+        const fileAsString = fileAsBuffer.toString();
+        const fileAsJSONArray = JSON.parse(fileAsString);
+        fileAsJSONArray.push(author);
+        fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+        res.send(author)
+    }   catch (error) {
+        res.send(500).send({ message: error.message})
     }
 })
 
