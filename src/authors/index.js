@@ -24,6 +24,20 @@ router.get("/", async (req, res, next) => {
 // get single author
 router.get("/:id", async (req, res, next) => {
     try {
+
+        const fileAsBuffer = fs.readFileSync(authorsFilePath);
+        const fileAsString = fileAsBuffer.toString();
+        const fileAsJSONArray = JSON.parse(fileAsString);
+        const author = fileAsJSONArray.find(
+        (author) => author.id === req.params.id
+        );
+        if(!author) {
+          res
+            .status(404)
+            .send({ message: `Author with ${req.params.id} is not found!`});
+        }
+        res.send(author);
+
     } catch (error) {
       res.send(500).send({ message: error.message})
     }
@@ -32,6 +46,7 @@ router.get("/:id", async (req, res, next) => {
 // create author
 router.post("/", async (req, res, next) => {
     try {
+
         const { name, surname, email, dateOfBirth } = req.body;
         const author = {
             id: uniqid(),
@@ -43,12 +58,14 @@ router.post("/", async (req, res, next) => {
             createdAt: new Date(),
             updatedAt: new Date(),
         };
+
         const fileAsBuffer = fs.readFileSync(authorsFilePath);
         const fileAsString = fileAsBuffer.toString();
         const fileAsJSONArray = JSON.parse(fileAsString);
         fileAsJSONArray.push(author);
         fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
         res.send(author)
+        
     }   catch (error) {
         res.send(500).send({ message: error.message})
     }
