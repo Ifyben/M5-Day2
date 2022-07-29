@@ -41,12 +41,26 @@ server.get(
       console.log(req.number)
       next();
    },
+
+
+   // (req, res, next) => {
+   //   req.number++;
+   //   req.number *= 20
+   //    next();
+   // },
+   // (req, res, next) => {
+      
+   //    res.send({ number: req.number })
+   // }
+
+   
    (req, res, next) => {
       req.number++;
       console.log(req.number);
       res.send({ number: req.number })
    }
 );
+
 
 console.log(listEndpoints(server));
 
