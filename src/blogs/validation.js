@@ -59,6 +59,7 @@ export const checkValidationResult = (req, res, next) => {
     if(!errors.isEmpty()) {
         const error = new Error("Blog post validation is failed");
         error.status = 400;
+        error.errors = errors.array();
         next(error);
     }
     next();
