@@ -52,6 +52,10 @@ const schema = {
     },
 };
 
+const searchSchema ={
+    
+}
+
 export const checkBlogPostSchema = checkSchema(schema);
 
 export const checkValidationResult = (req, res, next) => {

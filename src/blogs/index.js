@@ -22,6 +22,19 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+router.get("/search", async (req, res, next) => {
+  try {  
+    const { title } = req.query;
+    const fileAsBuffer = fs.readFileSync(blogsFilePath);
+    const fileAsString = fileAsBuffer.toString();
+    const array = JSON.parse(fileAsString);
+    const filtered = array.filter(blog => blog.title.toLowerCase().includes(title.toLowerCase()));
+    res.send(filtered);
+  } catch (error) {
+    res.send(500).send({ message: error.message });  
+  }
+});
+
 // get single blog
 router.get("/:id", async (req, res, next) => {
     try {
