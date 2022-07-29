@@ -23,23 +23,28 @@ server.get(
    },
    (req, res, next) => {
       req.number++;
+      console.log(req.number)
       next();
    },
    (req, res, next) => {
       req.number++;
+      console.log(req.number)
       next();
    },
    (req, res, next) => {
       req.number++;
+      console.log(req.number)
       next();
    },
    (req, res, next) => {
       req.number++;
+      console.log(req.number)
       next();
    },
    (req, res, next) => {
       req.number++;
-      res.send({ number: req.number });
+      console.log(req.number);
+      res.send({ number: req.number })
    }
 );
 
