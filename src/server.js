@@ -13,10 +13,35 @@ server.use(express.json());
 
 server.use("/authors", authorsRouter);
 
-server.get("/middleware", (req, res, next) => {
-   const { number } = req.query;
-   res.send({ number });
-});
+server.get(
+   "/middleware", 
+   (req, res, next) => {
+   let { number } = req.query;
+   number = parseInt(number);
+   req.number = number;
+   next();
+   },
+   (req, res, next) => {
+      req.number++;
+      next();
+   },
+   (req, res, next) => {
+      req.number++;
+      next();
+   },
+   (req, res, next) => {
+      req.number++;
+      next();
+   },
+   (req, res, next) => {
+      req.number++;
+      next();
+   },
+   (req, res, next) => {
+      req.number++;
+      res.send({ number: req.number });
+   }
+);
 
 console.log(listEndpoints(server));
 
