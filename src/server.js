@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import listEndpoints from "express-list-endpoints"
 import authorsRouter from "./authors/index.js"
+import { notFound, forbidden, catchAllErrorHandler } from "./errorHandlers.js"
 
 const server = express();
 
@@ -13,54 +14,11 @@ server.use(express.json());
 
 server.use("/authors", authorsRouter);
 
-server.get(
-   "/middleware", 
-   (req, res, next) => {
-   let { number } = req.query;
-   number = parseInt(number);
-   req.number = number;
-   next();
-   },
-   (req, res, next) => {
-      req.number++;
-      console.log(req.number)
-      next();
-   },
-   (req, res, next) => {
-      req.number++;
-      console.log(req.number)
-      next();
-   },
-   (req, res, next) => {
-      req.number++;
-      console.log(req.number)
-      next();
-   },
-   (req, res, next) => {
-      req.number++;
-      console.log(req.number)
-      next();
-   },
+server.use(notFound);
 
+server.use(forbidden);
 
-   // (req, res, next) => {
-   //   req.number++;
-   //   req.number *= 20
-   //    next();
-   // },
-   // (req, res, next) => {
-      
-   //    res.send({ number: req.number })
-   // }
-
-   
-   (req, res, next) => {
-      req.number++;
-      console.log(req.number);
-      res.send({ number: req.number })
-   }
-);
-
+server.use(catchAllErrorHandler);
 
 console.log(listEndpoints(server));
 
