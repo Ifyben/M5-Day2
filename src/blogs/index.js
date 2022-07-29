@@ -3,6 +3,7 @@ import fs from "fs"
 import uniqid from "uniqid"
 import path,{dirname} from "path";
 import { fileURLToPath } from "url"
+import { checkBlogPostSchema, checkValidationResult } from "./validation.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -44,28 +45,29 @@ router.get("/:id", async (req, res, next) => {
 })
 
 // create blog
-router.post("/", async (req, res, next) => {
+router.post("/", 
+checkBlogPostSchema, 
+checkValidationResult, 
+async (req, res, next) => {
     try {
-
-        const { name, surname, email, dateOfBirth } = req.body;
         const blog = {
             id: uniqid(),
-            name,
-            surname,
-            email,
-            dateOfBirth,
-            avatar: `https://ui-avatar.com/api/?name=${name}+${surname}`,
+            ...req.body,
             createdAt: new Date(),
             updatedAt: new Date(),
         };
 
         const fileAsBuffer = fs.readFileSync(blogsFilePath);
-        const fileAsString = fileAsBuffer.toString();
-        const fileAsJSONArray = JSON.parse(fileAsString);
-        fileAsJSONArray.push(blog);
-        fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
-        res.send(blog)
 
+        const fileAsString = fileAsBuffer.toString();
+
+        const fileAsJSONArray = JSON.parse(fileAsString);
+
+        fileAsJSONArray.push(blog);
+
+        fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+
+        res.send(blog)
     }   catch (error) {
         res.send(500).send({ message: error.message})
     }
