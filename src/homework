@@ -106,4 +106,10 @@
 
 ## Post article from new article form
 ## Fetch & List your articles at home page
+
+
+## Extra Features
+## GET /authors/:id/blogPosts/ => get all the posts for an author with a given ID
+## GET /blogPosts?title=whatever => filter the blogposts and extract the only that match the condition (es.: title contains "whatever")
+## Add search feature to frontend
  

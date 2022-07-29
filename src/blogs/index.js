@@ -3,7 +3,7 @@ import fs from "fs"
 import uniqid from "uniqid"
 import path,{dirname} from "path";
 import { fileURLToPath } from "url"
-import { checkBlogPostSchema, checkValidationResult } from "./validation.js";
+import { checkBlogPostSchema, checkSearchSchema, checkValidationResult } from "./validation.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.get("/search", async (req, res, next) => {
+router.get("/checkSearchSchema, checkValidationResult, search", async (req, res, next) => {
   try {  
     const { title } = req.query;
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
