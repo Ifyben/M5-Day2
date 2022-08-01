@@ -15,7 +15,9 @@ export const parseFile = multer();
 export const uploadFile = (req, res, next) => {
     try {
         console.log(req.file);
+        console.log(publicDirectory);
+        res.send("ok");
     } catch (error) {
-        
+        next(error);
     }
-}
+};
