@@ -4,6 +4,12 @@ import listEndpoints from "express-list-endpoints"
 import authorsRouter from "./authors/index.js"
 import blogsRouter from "./blogs/index.js"
 import { notFound, forbidden, catchAllErrorHandler } from "./errorHandlers.js"
+import path,{dirname} from "path";
+import { fileURLToPath } from "url"
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const publicDirectory = path.join(__dirname, "../public");
 
 const server = express();
 
