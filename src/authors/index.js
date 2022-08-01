@@ -99,7 +99,7 @@ router.delete("/:id", async (req, res, next) => {
 })
 
 // update author
-router.put("/:id/avatar", parseFile.single('avatar'), async (req, res, next) => {
+router.put("/:id/avatar", parseFile.single('avatar'), uploadFile, async (req, res, next) => {
     try {
         
         const fileAsBuffer = fs.readFileSync(authorsFilePath);
