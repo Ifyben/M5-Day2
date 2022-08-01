@@ -10,11 +10,11 @@ const __dirname = dirname(__filename);
 
 const publicDirectory = path.join(__dirname, "../../public");
 
-const parseFile = multer(); 
+export const parseFile = multer(); 
 
-const uploadFile = (req, res, next) => {
+export const uploadFile = (req, res, next) => {
     try {
-        
+        console.log(req.file);
     } catch (error) {
         
     }
