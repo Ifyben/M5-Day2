@@ -1,7 +1,7 @@
 import express from "express"
 import fs from "fs"
 import uniqid from "uniqid"
-import path,{dirname} from "path";
+import path,{dirname } from "path";
 import { fileURLToPath } from "url"
 import { checkBlogPostSchema, checkSearchSchema, checkValidationResult } from "./validation.js";
 

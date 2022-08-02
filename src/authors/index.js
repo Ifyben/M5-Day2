@@ -99,7 +99,7 @@ router.delete("/:id", async (req, res, next) => {
 })
 
 // update author
-router.put("/:id/avatar", parseFile.single('avatar'), uploadFile, async (req, res, next) => {
+router.put("/:id/avatar", parseFile.single("avatar"), uploadFile, async (req, res, next) => {
     try {
         
         const fileAsBuffer = fs.readFileSync(authorsFilePath);
@@ -116,7 +116,7 @@ router.put("/:id/avatar", parseFile.single('avatar'), uploadFile, async (req, re
             const previousAuthorData = fileAsJSONArray[authorIndex];
             const changedAuthor = {
                 ...previousAuthorData,
-                ...req.body,
+                avatar: req.file,
                 updatedAt: new Date(),
                 id: req.params.id,
             };
