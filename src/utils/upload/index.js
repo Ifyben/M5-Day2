@@ -2,7 +2,7 @@ import path,{ dirname, extname } from "path";
 
 import { fileURLToPath } from "url";
 
-import fs from "fs"
+import fs from "fs";
 
 import multer from "multer"; 
 
@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = dirname(__filename);
 
-const publicDirectory = path.join(__dirname, "../../public");
+const publicDirectory = path.join(__dirname, "../../../public");
 
 export const parseFile = multer(); 
 
@@ -24,7 +24,7 @@ export const uploadFile = (req, res, next) => {
         const link = `http://localhost:3001/${fileName}`;
         req.file = link;
         next();
-    } catch (error) {
+    }   catch (error) {
         next(error);
     }
 };

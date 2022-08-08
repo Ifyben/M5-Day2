@@ -19,7 +19,7 @@ server.use(cors());
 
 server.use(express.json());
 
-server.use(express.static(publicDirectory)); // i shared my publicDirectory
+server.use(express.static(publicDirectory)); // I shared my publicDirectory
 
 server.use("/authors", authorsRouter);
 
