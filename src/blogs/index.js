@@ -162,6 +162,7 @@ router.put("/:id/comment", checkCommentSchema, checkValidationResult, async (req
               .send({ message: `Blog with ${req.params.id} is not found!`});
           }
           const previousBlogData = fileAsJSONArray[blogIndex];
+          previousBlogData.comments = previousBlogData.comments || [];
           const changedBlog = {
               ...previousBlogData,
               ...req.body,
@@ -175,6 +176,7 @@ router.put("/:id/comment", checkCommentSchema, checkValidationResult, async (req
           res.send(changedBlog);
 
   } catch (error) {
+    console.log(error);
     res.send(500).send({ message: error.message})
   }
 });
