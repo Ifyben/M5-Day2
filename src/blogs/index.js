@@ -145,9 +145,11 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id/comment", checkCommentSchema, checkValidationResult, async (req, res, next) => {
   try {
       
+      const {text, userName} = req.body; 
+      const comment = { id: uniqid(), text, userName, createdAt: new Date() }
       const fileAsBuffer = fs.readFileSync(blogsFilePath);
       const fileAsString = fileAsBuffer.toString();
       let fileAsJSONArray = JSON.parse(fileAsString);
@@ -163,6 +165,7 @@ router.put("/:id", async (req, res, next) => {
           const changedBlog = {
               ...previousBlogData,
               ...req.body,
+              comments: [...previousBlogData.comments, comment],
               updatedAt: new Date(),
               id: req.params.id,
           };
