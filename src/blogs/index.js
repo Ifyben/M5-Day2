@@ -58,6 +58,29 @@ router.get("/:id", async (req, res, next) => {
     }
 })
 
+router.get("/:id/comments", async (req, res, next) => {
+  try {
+
+      const fileAsBuffer = fs.readFileSync(blogsFilePath);
+      const fileAsString = fileAsBuffer.toString();
+      const fileAsJSONArray = JSON.parse(fileAsString);
+      const blog = fileAsJSONArray.find(
+      (blog) => blog.id === req.params.id
+      );
+      if(!blog) {
+        res
+          .status(404)
+          .send({ message: `Blog with ${req.params.id} is not found!`});
+      }
+
+      blog.comments = blog.comments || [];
+      res.send(blog.comments);
+
+  } catch (error) {
+    res.send(500).send({ message: error.message})
+  }
+})
+
 // create blog
 router.post("/", 
 checkBlogPostSchema, 
