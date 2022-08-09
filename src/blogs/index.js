@@ -4,7 +4,7 @@ import uniqid from "uniqid"
 import path,{dirname } from "path";
 import { fileURLToPath } from "url"
 import { parseFile, uploadFile } from "../utils/upload/index.js";
-import { checkBlogPostSchema, checkSearchSchema, checkValidationResult } from "./validation.js";
+import { checkBlogPostSchema, checkCommentSchema, checkSearchSchema, checkValidationResult } from "./validation.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -113,37 +113,69 @@ router.delete("/:id", async (req, res, next) => {
     }
 })
 
-// update blog
-//router.put("/:id", async (req, res, next) => {
-//    try {
+ // update blog
+router.put("/:id", async (req, res, next) => {
+    try {
         
-//        const fileAsBuffer = fs.readFileSync(blogsFilePath);
-//        const fileAsString = fileAsBuffer.toString();
-//        let fileAsJSONArray = JSON.parse(fileAsString);
-//        const blogIndex = fileAsJSONArray.findIndex(
-//            (blog) => blog.id === req.params.id
-//            );
-//            if(!blogIndex == -1) {
-//              res
-//                .status(404)
-//                .send({ message: `Blog with ${req.params.id} is not found!`});
-//            }
-//            const previousBlogData = fileAsJSONArray[BlogIndex];
-//            const changedBlog = {
-//                ...previousBlogData,
-//                ...req.body,
-//                updatedAt: new Date(),
-//                id: req.params.id,
-//            };
-//            fileAsJSONArray[blogIndex] = changedBlog;
+        const fileAsBuffer = fs.readFileSync(blogsFilePath);
+        const fileAsString = fileAsBuffer.toString();
+        let fileAsJSONArray = JSON.parse(fileAsString);
+        const blogIndex = fileAsJSONArray.findIndex(
+            (blog) => blog.id === req.params.id
+            );
+            if(!blogIndex == -1) {
+              res
+                .status(404)
+                .send({ message: `Blog with ${req.params.id} is not found!`});
+            }
+            const previousBlogData = fileAsJSONArray[blogIndex];
+            const changedBlog = {
+                ...previousBlogData,
+                ...req.body,
+                updatedAt: new Date(),
+                id: req.params.id,
+            };
+            fileAsJSONArray[blogIndex] = changedBlog;
 
-//            fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
-//            res.send(changedBlog);
-//
-//    } catch (error) {
-//      res.send(500).send({ message: error.message})
-//    }
-//});
+            fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+            res.send(changedBlog);
+
+    } catch (error) {
+      res.send(500).send({ message: error.message})
+    }
+});
+
+router.put("/:id", async (req, res, next) => {
+  try {
+      
+      const fileAsBuffer = fs.readFileSync(blogsFilePath);
+      const fileAsString = fileAsBuffer.toString();
+      let fileAsJSONArray = JSON.parse(fileAsString);
+      const blogIndex = fileAsJSONArray.findIndex(
+          (blog) => blog.id === req.params.id
+          );
+          if(!blogIndex == -1) {
+            res
+              .status(404)
+              .send({ message: `Blog with ${req.params.id} is not found!`});
+          }
+          const previousBlogData = fileAsJSONArray[blogIndex];
+          const changedBlog = {
+              ...previousBlogData,
+              ...req.body,
+              updatedAt: new Date(),
+              id: req.params.id,
+          };
+          fileAsJSONArray[blogIndex] = changedBlog;
+
+          fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+          res.send(changedBlog);
+
+  } catch (error) {
+    res.send(500).send({ message: error.message})
+  }
+});
+
 
 router.put("/:id/cover", parseFile.single("cover"), uploadFile, async (req, res, next) => {
   try {
@@ -159,7 +191,7 @@ router.put("/:id/cover", parseFile.single("cover"), uploadFile, async (req, res,
               .status(404)
               .send({ message: `Blog with ${req.params.id} is not found!`});
           }
-          const previousBlogData = fileAsJSONArray[BlogIndex];
+          const previousBlogData = fileAsJSONArray[blogIndex];
           const changedBlog = {
               ...previousBlogData,
               cover: req.file,
